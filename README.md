@@ -15,6 +15,9 @@ The project contains code to:
 
 * Take a set number of pictures with the Raspberry Pi camera
 
+This code was made possible by the information obtained from the
+[Raspberry Pi Spy](http://www.raspberrypi-spy.co.uk/2013/05/how-to-disable-the-red-led-on-the-pi-camera-module/) blog.
+
 
 ## License
 
