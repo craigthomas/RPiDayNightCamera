@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 '''
+Copyright (C) 2014 Craig Thomas
+This project uses an MIT style license - see LICENSE for details.
+
 Simple PyCamera application. Will take any number of pictures with the 
 specified duration between snapshots in seconds. Optionally, will not turn on
 the LED for the camera.
