@@ -5,11 +5,10 @@
 This project represents a simple Python script that will take pictures
 using a Raspberry PI camera module. The main difference between this 
 script and the `raspistill` command is that it will turn the red LED
-off before taking pictures. 
-
-The main purpose of this project is to assist with gathering image
-samples for my Machine Learning Deer Detector project (you can read
-more about it [here](http://craigthomas.ca/blog/2014/08/04/deer-detection-with-machine-learning-part-1/).
+off before taking pictures. The main purpose of this project is to 
+assist with gathering image samples for my Machine Learning Deer 
+Detector project (you can read
+more about it [here](http://craigthomas.ca/blog/2014/08/04/deer-detection-with-machine-learning-part-1/)).
 
 The project contains code to:
 
