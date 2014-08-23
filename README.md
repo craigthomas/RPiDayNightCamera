@@ -14,9 +14,8 @@ The project contains code to:
 
 * Take a set number of pictures with the Raspberry Pi camera
 
-This code was made possible by the information obtained from the
-[Raspberry Pi Spy](http://www.raspberrypi-spy.co.uk/2013/05/how-to-disable-the-red-led-on-the-pi-camera-module/) blog.
-
+Adapted from the [PiCamera](http://picamera.readthedocs.org/en/latest/recipes1.html)
+basic recipes.
 
 ## License
 
@@ -48,13 +47,16 @@ To take pictures of various objects, you can specify the number of pictures
 to take as well as a time delay between successive pictures. For example,
 to take 10 pictures:
 
-    python rpinoledcamera.py -n 10
+    sudo python rpinoledcamera.py -n 10
 
 To take 10 pictures with a delay of 5 seconds between each:
 
-    python rpinoledcamera.py -n 10 -d 5
+    sudo python rpinoledcamera.py -n 10 -d 5
 
 Saving files to a different path:
 
-    python rpinoledcamera.py -p /path/to/save/to
+    sudo python rpinoledcamera.py -p /path/to/save/to
 
+Adjust for night time conditions:
+
+    sudo python rpinoledcamera.py -g
