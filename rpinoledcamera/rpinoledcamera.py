@@ -9,16 +9,11 @@ the LED for the camera.
 '''
 # I M P O R T S ###############################################################
 
-import RPi.GPIO as GPIO
 import os, sys, argparse, logging
 
-from time import strftime, localtime, sleep
+from time import sleep
 from picamera import PiCamera
-
-# C O N S T A N T S ###########################################################
-
-CAMERA_LED = 5
-TIMESTAMP_FORMAT = "%Y-%m-%d_%H-%M-%S"
+from fractions import Fraction
 
 # F U N C T I O N S ###########################################################
 
@@ -39,35 +34,9 @@ def parse_arguments():
         "generated images", default = ".", type = str)
     parser.add_argument("-t", metavar = "TYPE", help = "filetype to store "
         "images as (default jpg)", default = "jpg", type = str)
+    parser.add_argument("-g", action = "store_true", help = "adjust for "
+        "night conditions")
     return parser.parse_args()
-
-
-def validate_path(path):
-    '''
-    Checks to see if the path is valid. Will return True on a valid path,
-    False otherwise.
- 
-    @param path the path to validate
-    @type path str
-   
-    @returns True if the path is valid, false otherwise
-    '''
-    return os.path.exists(path)
- 
-
-def take_snapshot(camera, path, ext):
-    '''
-    Takes a single picture, and stores it as a file in the specified path.
-    
-    @param camera the PiCamera to use to take pictures
-    @type camera PiCamera
-    
-    @param path the validated path to store the file under
-    @type path str
-    '''
-    filename = strftime(TIMESTAMP_FORMAT, localtime())
-    camera.capture(os.path.join(path, "{}.{}".format(filename, ext)))
-
 
 def main(args):
     '''
@@ -80,24 +49,38 @@ def main(args):
     logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s',
         level = logging.INFO)
 
-    if not validate_path(args.p):
+    if not os.path.exists(args.p):
         logging.critical("Path [{}] is not a directory".format(args.p))
         sys.exit(1)
 
+    cam = PiCamera()
+    cam.led = False
+
+    if args.g:
+        cam.framerate = Fraction(1, 6)
+        cam.shutter_speed = 6000000
+        cam.exposure_mode = 'off'
+        cam.ISO = 800
+        cam.exposure_compensation = 25
+        logging.info("Waiting for auto white balance")
+        sleep(10)
+
     logging.info("Taking {} picture(s)".format(args.n))
+    cam.start_preview()
 
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(CAMERA_LED, GPIO.OUT, initial=False)
-    camera = PiCamera()
-    GPIO.output(CAMERA_LED, False)
+    fullfilename = "{timestamp}." + args.t
+    fullfilename = os.path.join(args.p, fullfilename)
 
-    for snapshot_num in xrange(args.n):
-        logging.info("Taking snapshot ({} of {})".format(snapshot_num + 1, 
-            args.n))
-        take_snapshot(camera, args.p, args.t)
-        logging.info("Sleeping for {} second(s)".format(args.d))
-        sleep(args.d)
+    try:
+        for i, filename in enumerate(cam.capture_continuous(fullfilename)):
+            logging.info("Taking snapshot ({} of {})".format(i + 1, args.n))
+            if not args.d == 0:
+                logging.info("Sleeping for {} second(s)".format(args.d))
+                sleep(args.d)
+            if i + 1 == args.n:
+                break
+    finally:
+        cam.stop_preview()
 
     logging.info("Execution complete")
     
