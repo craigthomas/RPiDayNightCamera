@@ -62,6 +62,8 @@ def main(args):
         cam.exposure_mode = 'off'
         cam.ISO = 800
         cam.exposure_compensation = 25
+        cam.awb_mode = 'off'
+        cam.awb_gains = (2.0, 2.0)
         logging.info("Waiting for auto white balance")
         sleep(10)
 
