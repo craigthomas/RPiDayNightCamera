@@ -6,7 +6,7 @@ This project represents a simple Python script that will take pictures
 using a Raspberry PI camera module. The main difference between this 
 script and the `raspistill` command is that it will turn the red LED
 off before taking pictures, and can automatically detect when to 
-switch between night and day mode settings.
+switch between user specified night and day mode settings.
 
 The main purpose of this project is to assist with gathering image 
 samples for my Machine Learning Deer Detector project (you can read
@@ -55,7 +55,7 @@ This can generally be accomplished on the Raspberry Pi with:
 There are several options available for the program. Running the script
 with the `-h` option will display a helpful description of the options:
 
-    python rpinoledcamera.py -h
+    python rpidaynightcam.py -h
 
 
 ### Taking Pictures
@@ -64,23 +64,23 @@ To take pictures of various objects, you can specify the number of pictures
 to take as well as a time delay between successive pictures. For example,
 to take 10 pictures:
 
-    sudo python rpinoledcamera.py -n 10
+    sudo python rpidaynightcam.py -n 10
 
 To take 10 pictures with a delay of 5 seconds between each:
 
-    sudo python rpinoledcamera.py -n 10 -d 5
+    sudo python rpidaynightcam.py -n 10 -d 5
 
 Saving files to a different path:
 
-    sudo python rpinoledcamera.py -p /path/to/save/to
+    sudo python rpidaynightcam.py -p /path/to/save/to
 
 Set night time conditions:
 
-    sudo python rpinoledcamera.py -g
+    sudo python rpidaynightcam.py -g
 
 Take pictures until interrupted:
 
-    sudo python rpinoledcamera.py -n 0
+    sudo python rpidaynightcam.py -n 0
 
 
 ### Adjusting for light conditions
@@ -88,7 +88,7 @@ Take pictures until interrupted:
 You can instruct the camera module to attempt to adjust for light conditions
 by specifying the `--auto` switch:
 
-    sudo python rpinoledcamera.py --auto -n 0
+    sudo python rpidaynightcam.py --auto -n 0
 
 This will continue taking pictures until the program is interrupted. In order
 to switch between day and night mode, you can specify at what light level
@@ -104,7 +104,7 @@ to get the camera to switch to day mode when the average pixel intensity
 reaches 240, and switch to night mode when the average pixel intensity reaches
 30:
 
-    sudo python rpinoledcamera.py --auto --day 240 --night 30 -n 0
+    sudo python rpidaynightcam.py --auto --day 240 --night 30 -n 0
 
 
 ### Calculating Histograms
