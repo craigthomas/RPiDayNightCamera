@@ -3,7 +3,7 @@
 Copyright (C) 2014 Craig Thomas
 This project uses an MIT style license - see LICENSE for details.
 
-Simple PyCamera application. Will take any number of pictures with the 
+Simple PyCamera application. Will take any number of pictures with the
 specified duration between snapshots in seconds. Optionally, will not turn on
 the LED for the camera.
 '''
@@ -29,11 +29,11 @@ def parse_arguments():
 
     @returns a named tuple containing the parsed arguments
     '''
-    parser = argparse.ArgumentParser(description = "Takes pictures with a "
+    parser = argparse.ArgumentParser(description="Takes pictures with a "
         "Raspberry Pi camera. See README.md for more information, and LICENSE "
         "for terms of use.")
     parser.add_argument("-n", metavar="NUMBER", help="the number of "
-        "pictures to take (default 1)", default=1, type=int)
+        "pictures to take (default 1, 0 = continuous)", default=1, type=int)
     parser.add_argument("-d", metavar="DELAY", help="delay in seconds "
         "between pictures (default 0)", default=0, type=int)
     parser.add_argument("-p", metavar="PATH", help="location to store "
@@ -48,9 +48,9 @@ def parse_arguments():
     parser.add_argument("--day", help="the intensity value at "
         "which to switch to day-time image settings (default 230, "
         "requires --auto)", default=230, type=int)
-    parser.add_argument("--auto", help = "automatically switch between "
+    parser.add_argument("--auto", help="automatically switch between "
         "day-time and night-time image settings", action="store_true")
-    parser.add_argument("--check", help = "check for day or night time "
+    parser.add_argument("--check", help="check for day or night time "
         "settings after this many snapshots (default 5, requires "
         "--auto)", default=5, type=int)
     return parser.parse_args()
@@ -95,13 +95,13 @@ def day_mode(cam):
 def main(args):
     '''
     Will loop and take snapshots from the camera after the specified number
-    of seconds delay. 
+    of seconds delay.
 
     @param args the parsed command line arguments
     @type args named tuple
     '''
-    logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s',
-        level = logging.INFO)
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+        level=logging.INFO)
 
     if not os.path.exists(args.p):
         logging.critical("Path [{}] is not a directory".format(args.p))
@@ -115,8 +115,8 @@ def main(args):
         night_mode(cam)
         mode = NIGHT_MODE
 
-    if args.auto:
-        logging.info("Taking pictures (auto adjusting for conditions)")
+    if args.n == 0:
+        logging.info("Taking pictures")
     else:
         logging.info("Taking {} picture(s)".format(args.n))
 
@@ -125,10 +125,11 @@ def main(args):
     snapcounter = 1
 
     for i, filename in enumerate(cam.capture_continuous(fullfilename)):
-        if args.auto:
+        if args.n == 0:
             logging.info("Taking snapshot ({} mode)".format(mode))
         else:
-            logging.info("Taking snapshot ({} of {})".format(i + 1, args.n))
+            logging.info("Taking snapshot ({} of {}, {} mode)".format(
+                   i + 1, args.n, mode))
 
         if args.auto and snapcounter > args.check:
             snapcounter = 0
@@ -149,7 +150,7 @@ def main(args):
 
         if args.auto:
             snapcounter += 1
-                
+
         if not args.d == 0:
             delay = args.d
 
@@ -160,11 +161,11 @@ def main(args):
             logging.info("Sleeping for {} second(s)".format(delay))
             sleep(delay)
 
-        if not args.auto and i + 1 == args.n:
+        if args.n > 0 and i + 1 == args.n:
             break
 
     logging.info("Execution complete")
-    
+
 
 ###############################################################################
 
