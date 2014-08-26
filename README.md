@@ -31,6 +31,13 @@ with the Pi Camera module enabled (do this using `sudo raspi-config`).
 Because the script requires direct access to the camera, you will
 also need to run it as root with `sudo`.
 
+In addition to the Raspberry Pi Camera, you will need the following
+Python packages installed:
+
+* numpy
+* matplotlib
+* opencv
+
 
 ## Running
 
@@ -60,3 +67,16 @@ Saving files to a different path:
 Adjust for night time conditions:
 
     sudo python rpinoledcamera.py -g
+
+### Calculating Histograms
+
+To calcuate the histogram of an image, simply run the histogram 
+program on the specified image. The intensity values will be
+printed out on the standard out device:
+
+    python histogram.py myimagefile.jpg
+
+If you want to display the histogram data graphically, add the
+`-d` option:
+
+    python histogram.py myimagefile.jpg -d
