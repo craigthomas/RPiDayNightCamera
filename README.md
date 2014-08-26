@@ -38,6 +38,10 @@ Python packages installed:
 * matplotlib
 * opencv
 
+This can generally be accomplished on the Raspberry Pi with:
+
+    sudo apt-get install python-opencv python-matplotlib
+
 
 ## Running
 
@@ -68,6 +72,29 @@ Adjust for night time conditions:
 
     sudo python rpinoledcamera.py -g
 
+### Adjusting for light conditions
+
+You can instruct the camera module to attempt to adjust for light conditions
+by specifying the `--auto` switch:
+
+    sudo python rpinoledcamera.py --auto
+
+This will continue taking pictures until the program is interrupted. In order
+to switch between day and night mode, you can specify at what light level
+you want to make the swap on. For example, if the camera is in night mode,
+then increasing light levels will make the picture brighter and brighter 
+until the entire image is white. To swap to day mode, the camera calculates
+the R, G, and B average intensities, and compares it to the `--day` value.
+If the intensities are greater than the `--day` value, it will attempt to 
+turn the camera on to day mode. The opposite occurs for `--night` values.
+
+Both `--day` and `--night` are values in the range of 0 - 255. For example,
+to get the camera to switch to day mode when the average pixel intensity 
+reaches 240, and switch to night mode when the average pixel intensity reaches
+30:
+
+    sudo python rpinoledcamera.py --auto --day 240 --night 30
+
 ### Calculating Histograms
 
 To calcuate the histogram of an image, simply run the histogram 
@@ -80,3 +107,6 @@ If you want to display the histogram data graphically, add the
 `-d` option:
 
     python histogram.py myimagefile.jpg -d
+
+The main camera application uses the histogram routines to figure out when
+to swap between day and night modes.

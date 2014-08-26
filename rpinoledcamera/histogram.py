@@ -10,7 +10,6 @@ Simple application to compute the color histogram of the supplied image.
 import argparse, cv2, os, sys, logging
 
 from numpy import squeeze, asarray
-
 from matplotlib import pyplot
 
 # C O N S T A N T S ###########################################################
