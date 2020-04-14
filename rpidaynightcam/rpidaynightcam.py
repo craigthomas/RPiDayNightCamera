@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''
-Copyright (C) 2014 Craig Thomas
+"""
+Copyright (C) 2014-2020 Craig Thomas
 This project uses an MIT style license - see LICENSE for details.
 
 Simple PyCamera application. Will take any number of pictures with the
 specified duration between snapshots in seconds. Optionally, will not turn on
 the LED for the camera.
-'''
+"""
 # I M P O R T S ###############################################################
 
 import os, sys, argparse, logging
@@ -23,46 +23,66 @@ NIGHT_MODE = "night"
 
 # F U N C T I O N S ###########################################################
 
+
 def parse_arguments():
-    '''
+    """
     Parses the command line argments passed to the program.
 
-    @returns a named tuple containing the parsed arguments
-    '''
-    parser = argparse.ArgumentParser(description="Takes pictures with a "
+    :return: a named tuple containing the parsed arguments
+    """
+    parser = argparse.ArgumentParser(
+        description="Takes pictures with a "
         "Raspberry Pi camera. See README.md for more information, and LICENSE "
-        "for terms of use.")
-    parser.add_argument("-n", metavar="NUMBER", help="the number of "
-        "pictures to take (default 1, 0 = continuous)", default=1, type=int)
-    parser.add_argument("-d", metavar="DELAY", help="delay in seconds "
-        "between pictures (default 0)", default=0, type=int)
-    parser.add_argument("-p", metavar="PATH", help="location to store "
-        "generated images", default=".", type=str)
-    parser.add_argument("-t", metavar="TYPE", help="filetype to store "
-        "images as (default jpg)", default="jpg", type=str)
-    parser.add_argument("-g", action="store_true", help="adjust for "
-        "night conditions")
-    parser.add_argument("--night", help="the intensity value at "
+        "for terms of use."
+    )
+    parser.add_argument(
+        "-n", metavar="NUMBER", help="the number of "
+        "pictures to take (default 1, 0 = continuous)", default=1, type=int
+    )
+    parser.add_argument(
+        "-d", metavar="DELAY", help="delay in seconds "
+        "between pictures (default 0)", default=0, type=int
+    )
+    parser.add_argument(
+        "-p", metavar="PATH", help="location to store "
+        "generated images", default=".", type=str
+    )
+    parser.add_argument(
+        "-t", metavar="TYPE", help="filetype to store "
+        "images as (default jpg)", default="jpg", type=str
+    )
+    parser.add_argument(
+        "-g", action="store_true", help="adjust for "
+        "night conditions"
+    )
+    parser.add_argument(
+        "--night", help="the intensity value at "
         "which to switch to night-time image settings (default 40, "
-        "requires --auto)", default=40, type=int)
-    parser.add_argument("--day", help="the intensity value at "
+        "requires --auto)", default=40, type=int
+    )
+    parser.add_argument(
+        "--day", help="the intensity value at "
         "which to switch to day-time image settings (default 230, "
-        "requires --auto)", default=230, type=int)
-    parser.add_argument("--auto", help="automatically switch between "
-        "day-time and night-time image settings", action="store_true")
-    parser.add_argument("--check", help="check for day or night time "
+        "requires --auto)", default=230, type=int
+    )
+    parser.add_argument(
+        "--auto", help="automatically switch between "
+        "day-time and night-time image settings", action="store_true"
+    )
+    parser.add_argument(
+        "--check", help="check for day or night time "
         "settings after this many snapshots (default 5, requires "
-        "--auto)", default=5, type=int)
+        "--auto)", default=5, type=int
+    )
     return parser.parse_args()
 
 
 def night_mode(cam):
-    '''
+    """
     Switches the camera to night mode.
 
-    @param cam the PiCamera to tweak
-    @type cam PiCamera
-    '''
+    :param cam: the PiCamera to tweak
+    """
     logging.info("Switching to night-time mode")
     cam.framerate = Fraction(1, 6)
     cam.shutter_speed = 3000000
@@ -76,12 +96,11 @@ def night_mode(cam):
 
 
 def day_mode(cam):
-    '''
+    """
     Switches the camera to day mode.
 
-    @param cam the PiCamera to tweak
-    @type cam PiCamera
-    '''
+    :@param cam: the PiCamera to tweak
+    """
     logging.info("Switching to day-time mode")
     cam.shutter_speed = 0
     cam.exposure_mode = 'auto'
@@ -93,15 +112,16 @@ def day_mode(cam):
 
 
 def main(args):
-    '''
+    """
     Will loop and take snapshots from the camera after the specified number
     of seconds delay.
 
-    @param args the parsed command line arguments
-    @type args named tuple
-    '''
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-        level=logging.INFO)
+    :param args: the parsed command line arguments
+    """
+    logging.basicConfig(
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
 
     if not os.path.exists(args.p):
         logging.critical("Path [{}] is not a directory".format(args.p))

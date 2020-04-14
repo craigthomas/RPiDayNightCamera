@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-'''
-Copyright (C) 2014 Craig Thomas
+"""
+Copyright (C) 2014-2020 Craig Thomas
 This project uses an MIT style license - see LICENSE for details.
 
 Simple application to compute the color histogram of the supplied image.
-'''
+"""
 # I M P O R T S ###############################################################
 
 import argparse, cv2, os, sys, logging
@@ -20,29 +20,35 @@ BLUE = "blue"
 
 # F U N C T I O N S ###########################################################
 
+
 def parse_arguments():
-    '''
+    """
     Parses the command line arguments passed to the program.
 
-    @retuyrn a named tuple containing the parsed arguments
-    '''
-    parser = argparse.ArgumentParser(description="Computes the color "
+    :return: a named tuple containing the parsed arguments
+    """
+    parser = argparse.ArgumentParser(
+        description="Computes the color "
         "histogram of the specified image. See README.md for more "
-        "information, and LICENSE for terms of use.")
-    parser.add_argument("-d", action="store_true", help="display a pop-up "
-        "window of the histogram information")
-    parser.add_argument("filename", type=str, help="the name of the image "
-        "file to process")
+        "information, and LICENSE for terms of use."
+    )
+    parser.add_argument(
+        "-d", action="store_true", help="display a pop-up "
+        "window of the histogram information"
+    )
+    parser.add_argument(
+        "filename", type=str, help="the name of the image "
+        "file to process"
+    )
     return parser.parse_args()
 
 
 def display_histogram(data, filename):
-    '''
+    """
     Uses matplotlib to display histogram information.
 
-    @param data the color histogram data
-    @type data dict(red, green, blue)
-    '''
+    :param data: the color histogram data
+    """
     pyplot.plot(data[RED], color='r')
     pyplot.plot(data[GREEN], color='g')
     pyplot.plot(data[BLUE], color='b')
@@ -55,15 +61,12 @@ def display_histogram(data, filename):
 
 
 def weighted_means(data):
-    '''
-    Calcluates the weighted means for the histogram data.
+    """
+    Calculates the weighted means for the histogram data.
 
-    @param data the color histogram data
-    @type data dict(red, green, blue)
-
-    @return the weighted means for each component
-    @rtype dict(red, green, blue)
-    '''
+    :param data: the color histogram data
+    :return: the weighted means for each component
+    """
     wred = 0
     wgreen = 0
     wblue = 0
@@ -81,35 +84,31 @@ def weighted_means(data):
 
 
 def print_histogram(data):
-    '''
+    """
     Prints out histogram data.
 
-    @param data the color histogram data
-    @type data dict(red, green, blue)
-    '''
+    :param data: the color histogram data
+    """
     print("Intensity |    Red     |    Green   |    Blue    |")
     print("----------+------------+------------+------------+")
     for i in xrange(256):
         print(" {:<8} | {:<10} | {:<10} | {:<10} |".format(
             i, data[RED][i], data[GREEN][i], data[BLUE][i]
         ))
-    wmeans = weighted_means(data)
+    w_means = weighted_means(data)
     print("----------+------------+------------+------------+")
     print("Wgt-Mean  | {:<10} | {:<10} | {:<10} |".format(
-            wmeans[RED], wmeans[GREEN], wmeans[BLUE]
+            w_means[RED], w_means[GREEN], w_means[BLUE]
         ))
 
 
 def compute_histogram(filename):
-    '''
+    """
     Computes the histogram data for the specified file.
 
-    @param filename the name of the file to open
-    @type filename str
-
-    @return the computed histogram data
-    @rtype dict(red, green, blue)
-    '''
+    :param filename: the name of the file to open
+    :return: the computed histogram data
+    """
     image = cv2.imread(filename)
     if image.ndim == 1:
         blue = cv2.calcHist([image], [0], None, [256], [0, 256])
@@ -132,12 +131,12 @@ def compute_histogram(filename):
 
 
 def main(args):
-    '''
+    """
     Runs the main program on the supplied arguments. Attempts to verify if
     the file name supplied is valid, and if so, will compute the histogram
     data for the file. Will optionally display an image of the histogram
     data.
-    '''
+    """
     logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
         level=logging.INFO)
 
@@ -153,6 +152,7 @@ def main(args):
     print_histogram(data)
 
 ###############################################################################
+
 
 if __name__ == "__main__":
     main(parse_arguments())
