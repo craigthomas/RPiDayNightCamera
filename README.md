@@ -1,5 +1,9 @@
 # Raspberry Pi - Day, Night NOIR Camera
 
+## This project is no longer maintained
+
+This project is no longer actively maintained due to the sunsetting of Python 2.
+
 ## What is it?
 
 This project represents a simple Python script that will take pictures
@@ -9,8 +13,7 @@ off before taking pictures, and can automatically detect when to
 switch between user specified night and day mode settings.
 
 The main purpose of this project is to assist with gathering image 
-samples for my Machine Learning Deer Detector project (you can read
-more about it [here](http://craigthomas.ca/blog/2014/08/04/deer-detection-with-machine-learning-part-1/)).
+samples for my Machine Learning Deer Detector project.
 
 The project contains code to:
 
@@ -31,7 +34,7 @@ LICENSE for more information.
 ## Requirements
 
 You will need a Raspberry Pi with a Pi Camera module installed. It is 
-recommended that you install the latest version of [Raspbian](http://www.raspbian.org/) 
+recommended that you install the latest version of Raspbian 
 with the Pi Camera module enabled (do this using `sudo raspi-config`). 
 Because the script requires direct access to the camera, you will
 also need to run it as root with `sudo`.
